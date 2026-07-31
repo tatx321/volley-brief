@@ -1,0 +1,8 @@
+# volley-brief/.gitignore
+# The cohort denylist is the one thing in this workflow that must never be pushed.
+.cohort_names
+
+# Local state and scratch — the brief is generated from these, never the reverse.
+volley_state.json
+__pycache__/
+*.pyc
