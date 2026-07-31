@@ -1,0 +1,11 @@
+# Copy to .cohort_names and fill in the real first names. NEVER COMMIT .cohort_names.
+# One name per line. Blank lines and # comments ignored; matching is
+# case-insensitive and word-boundary anchored.
+#
+# brief_parse.py refuses to run if this sidecar is missing or empty — a name
+# check that cannot fail is not a check, and it runs on a file about to go public.
+firstname-of-c1
+firstname-of-c2
+firstname-of-c3
+firstname-of-c4
+firstname-of-c5

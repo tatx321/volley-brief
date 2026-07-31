@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# volley-brief pre-commit — the only place the privacy rule can actually be enforced.
+#
+# The same checks on the reading side fire after the file is already public, which
+# is a smoke alarm in the wrong room. A non-zero exit here is a hard stop: fix the
+# brief, never the guard.
+#
+# Installed copy lives at .git/hooks/pre-commit, which git does not track — this
+# versioned copy is what makes it survivable across a fresh clone. Re-install with:
+#     ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+# Belt and braces: the sidecar is gitignored, but a `git add -f` would beat that.
+if git diff --cached --name-only | grep -qx '.cohort_names'; then
+  echo "BLOCKED — .cohort_names is staged. That file is the denylist itself and"
+  echo "must never be committed anywhere. Unstage it: git restore --staged .cohort_names"
+  exit 1
+fi
+
+# Only gate when the brief is actually part of this commit.
+if git diff --cached --name-only | grep -qx 'PROJECT-BRIEF.md'; then
+  python3 brief_parse.py PROJECT-BRIEF.md --guard-only
+fi
