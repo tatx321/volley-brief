@@ -1,17 +1,17 @@
 <!-- VOLLEY-STATE v1 -->
 BRIEF-VERSION 1
-BRIEF-GENERATED 2026-08-01T04:09Z
-BRIEF-COMMIT b154488
+BRIEF-GENERATED 2026-08-01T22:20Z
+BRIEF-COMMIT 5e0be61
 BRIEF-BRANCH main
-FACT current_build :: 13 :: eng :: 2026-07-30
+FACT current_build :: 14 :: eng :: 2026-08-01
 FACT staged_build :: 14, awaiting Apple review :: eng :: 2026-08-01
 FACT friends_signed_in :: 6 :: eng :: 2026-08-01
-FACT items_cataloged :: 123 total / 117 confirmed :: eng :: 2026-08-01
-FACT invite_reusability :: reusable and uncapped in db, zero durable codes minted :: eng :: 2026-07-31
-FACT ranks_closed :: through 18a in a build; 18b and 19 on main, never built :: eng :: 2026-07-31
-FACT gate_c_build :: none :: eng :: 2026-07-31
+FACT items_cataloged :: 123 total / 122 confirmed :: eng :: 2026-08-01
+FACT invite_reusability :: reusable and uncapped; 2 durable codes minted, 9 legacy still expiring :: eng :: 2026-08-01
+FACT ranks_closed :: through 19 — 18b and 19 shipped in build 14 :: eng :: 2026-08-01
+FACT gate_c_build :: 14 :: eng :: 2026-08-01
 FACT feedback_pipe :: live, 2 rows :: eng :: 2026-07-31
-FACT landing_attribution :: live, 11 arrivals logged :: eng :: 2026-08-01
+FACT landing_attribution :: live, 19 arrivals logged :: eng :: 2026-08-01
 FACT privacy_lending_amendment :: deployed and verified live :: eng :: 2026-08-01
 FACT gate_c_date :: unset :: gtm :: 2026-07-31
 FACT marketing_version :: 1.0.0 held :: gtm :: 2026-07-31
@@ -19,9 +19,7 @@ FACT landing_lending_first :: shipped :: gtm :: 2026-07-30
 FACT landing_imagery :: real wardrobe cutouts :: gtm :: 2026-07-30
 FACT gate_a :: closed :: joint :: 2026-07-21
 FACT gate_b :: closed :: joint :: 2026-07-28
-NOTE current_build :: this row tracks what the cohort runs, not what exists. Build 13 is 18a-scope — it carries friend connection only, and has no sharing, lendable or borrow controls in it at all
 NOTE staged_build :: build 14 was cut from main at 17:41 on Jul 31 and DOES carry 18b/19 — AtTheNet, FriendCloset and lib/social were all present in the tree at that commit, verified rather than assumed. The moment it clears review and the cohort updates, the 13 waiting shares become visible and gate C is one borrow away
-NOTE staged_build :: build 12 was cancelled and never distributed; the next build is the first to carry rank 18b and 19, and has not been cut
 NOTE friends_signed_in :: six, not five — c6 joined by referral from c5 on Jul 30 and was not in the original tier-1 list
 NOTE items_cataloged :: c1 is 0 captured / 0 confirmed, opened the app 3 times and never took a photo
 NOTE items_cataloged :: c2 is 6 captured / 0 confirmed, stalled at the confirm step — 6 photos taken, confirm never pressed once
@@ -32,22 +30,23 @@ NOTE items_cataloged :: c6 is 0 captured / 0 confirmed, 2 opens
 NOTE items_cataloged :: every cohort member who catalogued anything did it on exactly one day and has not returned to it
 NOTE invite_reusability :: migration 0025 is applied in prod and committed; the client half was uncommitted until Jul 31 and is now on main. All 14 existing codes still carry an expiry because get-or-create returns the caller's existing row
 NOTE items_cataloged :: 13 item_shares and 6 lendable items now exist, all created by Tate on 2026-08-01 as a deliberate nudge — 3 to c5, 4 to c3, 3 to c2, plus 3 from a demo account. They are real rows and they will appear the moment a build carrying 18b/19 reaches the cohort
-NOTE gate_c_build :: NONE OF THE COHORT CAN SEE THOSE SHARES. Build 13 has no FriendCloset screen at all, so a shared piece has no surface to render on. Silence from the cohort is not disinterest, it is an absent screen
 NOTE friends_signed_in :: two accounts created 2026-08-01 are Tate's own test rigs on the onvolley.com domain, not cohort members, and are excluded from this count
+NOTE current_build :: build 14 reached the cohort 2026-08-01, confirmed by Tate against App Store Connect. It is the FIRST build ever to carry sharing, lendable and the borrow loop
+NOTE gate_c_build :: the 16 shares and 9 lendable pieces are now visible to the cohort for the first time. But no cohort member has opened a friend closet yet — all friend_closet_opened events are Tate's. Available is not opened
 NOTE gate_c_build :: build 13 was cut from an off-main staged commit that reverted 18b and 19 thirty-two seconds before the build started. Main carries both in full; no build ever has
 NOTE feedback_pipe :: in-app door plus the inbox function, both active in prod
 NOTE landing_attribution :: arrivals are logged by tag and referrer host with no identifier of any kind; the first post measured end to end is the Jul 30 story set
 NOTE privacy_lending_amendment :: the live policy states that sharing a piece is not built and that a friend cannot see any item, and promises to say so there before it ships. It must deploy in the same motion as the first build carrying lending
 NOTE gate_b :: recomputed Jul 31 against live data rather than carried forward
-OPEN gate_c_build_unshipped :: eng :: no build has ever carried rank 18b or 19, so nothing can be shared or borrowed by anyone; gate C sits behind a build, not behind persuasion
-OPEN shares_invisible_to_cohort :: eng :: 13 shares and 6 lendable items exist in prod but no shipped build can display any of them; the nudge cannot land until 18b/19 is in a build
-OPEN legacy_invites_expire :: eng :: all 14 invite codes still carry an expiry and the earliest falls on 2026-08-03; 10 are unredeemed and none has been deleted
-OPEN invite_page_stale :: eng :: the public invite page still reads that a code works once and expires a week after it was sent, and still has no open-in-app button
-OPEN duplicate_migration_0021 :: eng :: two migrations share the number 0021, so ordering is filename luck rather than intent
-OPEN privacy_amendment_undeployed :: eng :: the lending amendment is written but not deployed, and the local landing copy is byte-identical to the live page
+OPEN legacy_invites_expire :: eng :: 9 unredeemed codes still carry an expiry, the earliest on 2026-08-03; two durable codes now exist. Tapping Invite friends promotes the newest to never-expiring
+OPEN gate_c_one_borrow :: joint :: everything gate C needs is now live — build 14 is on the cohort's phones and 9 pieces are lendable. What remains is one real borrow between two real friends, and nobody has opened a friend closet yet
 OPEN cohort_confirm_stall :: eng :: c2 has 6 photos and zero confirms after 3 days, and c1 independently reported the same seam in words — capture to closet takes two screens and she called it unintuitive. Two of six on the same handoff is a pattern, not an anecdote
 OPEN feedback_pipe_empty :: eng :: the in-app feedback door has never delivered a real submission; the table holds only two test rows and app_feedback_sent has never fired from any device, including c1 who says she used it
 OPEN gate_c_date_unset :: gtm :: no target date is recorded for gate C
+SHIPPED 2026-08-01 :: build 14 reached the cohort — sharing, lendable and the borrow loop in a shipped build for the first time
+SHIPPED 2026-08-01 :: welcome email v2 deployed the moment build 14 landed, so 'and you can lend now' was never false in an inbox
+SHIPPED 2026-08-01 :: tag-items auto-admit — a usable piece enters the closet without a review tap; only a missing cutout or a removal fallback holds one back
+SHIPPED 2026-08-01 :: c2's six stranded pieces admitted and a mis-oriented cutout corrected, giving her a working closet and a first outfit
 SHIPPED 2026-08-01 :: c1 activated — 13 confirmed pieces in about thirty minutes, camera only, connected mid-session, welcome email delivered at 03:53Z. Third activated member
 SHIPPED 2026-08-01 :: privacy lending amendment deployed and verified live, ahead of the first build carrying lending
 SHIPPED 2026-08-01 :: ig13-friendsonly posted as a reel and recorded its first tagged arrival, the first slot measured end to end
@@ -57,7 +56,7 @@ SHIPPED 2026-07-30 :: migration 0025, reusable per-user invites, uncapped and du
 SHIPPED 2026-07-30 :: migration 0024, campaign arrivals logged by tag and referrer host
 SHIPPED 2026-07-30 :: landing page relaunched lending-first with real wardrobe cutouts
 FACTCOUNT 16
-OPENCOUNT 9
+OPENCOUNT 5
 <!-- /VOLLEY-STATE -->
 
 # Volley — project brief
