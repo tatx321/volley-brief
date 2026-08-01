@@ -1,18 +1,18 @@
 <!-- VOLLEY-STATE v1 -->
 BRIEF-VERSION 1
-BRIEF-GENERATED 2026-08-01T02:30Z
-BRIEF-COMMIT 4ec69cd
+BRIEF-GENERATED 2026-08-01T04:09Z
+BRIEF-COMMIT b154488
 BRIEF-BRANCH main
 FACT current_build :: 13 :: eng :: 2026-07-30
-FACT staged_build :: none :: eng :: 2026-07-31
+FACT staged_build :: 14, awaiting Apple review :: eng :: 2026-08-01
 FACT friends_signed_in :: 6 :: eng :: 2026-08-01
-FACT items_cataloged :: 110 total / 104 confirmed :: eng :: 2026-08-01
+FACT items_cataloged :: 123 total / 117 confirmed :: eng :: 2026-08-01
 FACT invite_reusability :: reusable and uncapped in db, zero durable codes minted :: eng :: 2026-07-31
 FACT ranks_closed :: through 18a in a build; 18b and 19 on main, never built :: eng :: 2026-07-31
 FACT gate_c_build :: none :: eng :: 2026-07-31
 FACT feedback_pipe :: live, 2 rows :: eng :: 2026-07-31
 FACT landing_attribution :: live, 11 arrivals logged :: eng :: 2026-08-01
-FACT privacy_lending_amendment :: written, not deployed :: eng :: 2026-07-31
+FACT privacy_lending_amendment :: deployed and verified live :: eng :: 2026-08-01
 FACT gate_c_date :: unset :: gtm :: 2026-07-31
 FACT marketing_version :: 1.0.0 held :: gtm :: 2026-07-31
 FACT landing_lending_first :: shipped :: gtm :: 2026-07-30
@@ -20,6 +20,7 @@ FACT landing_imagery :: real wardrobe cutouts :: gtm :: 2026-07-30
 FACT gate_a :: closed :: joint :: 2026-07-21
 FACT gate_b :: closed :: joint :: 2026-07-28
 NOTE current_build :: this row tracks what the cohort runs, not what exists. Build 13 is 18a-scope — it carries friend connection only, and has no sharing, lendable or borrow controls in it at all
+NOTE staged_build :: build 14 was cut from main at 17:41 on Jul 31 and DOES carry 18b/19 — AtTheNet, FriendCloset and lib/social were all present in the tree at that commit, verified rather than assumed. The moment it clears review and the cohort updates, the 13 waiting shares become visible and gate C is one borrow away
 NOTE staged_build :: build 12 was cancelled and never distributed; the next build is the first to carry rank 18b and 19, and has not been cut
 NOTE friends_signed_in :: six, not five — c6 joined by referral from c5 on Jul 30 and was not in the original tier-1 list
 NOTE items_cataloged :: c1 is 0 captured / 0 confirmed, opened the app 3 times and never took a photo
@@ -44,8 +45,11 @@ OPEN legacy_invites_expire :: eng :: all 14 invite codes still carry an expiry a
 OPEN invite_page_stale :: eng :: the public invite page still reads that a code works once and expires a week after it was sent, and still has no open-in-app button
 OPEN duplicate_migration_0021 :: eng :: two migrations share the number 0021, so ordering is filename luck rather than intent
 OPEN privacy_amendment_undeployed :: eng :: the lending amendment is written but not deployed, and the local landing copy is byte-identical to the live page
-OPEN cohort_confirm_stall :: eng :: c2 has 6 photos and zero confirms after 3 days; the confirm step is the only place a cohort member has ever stalled
+OPEN cohort_confirm_stall :: eng :: c2 has 6 photos and zero confirms after 3 days, and c1 independently reported the same seam in words — capture to closet takes two screens and she called it unintuitive. Two of six on the same handoff is a pattern, not an anecdote
+OPEN feedback_pipe_empty :: eng :: the in-app feedback door has never delivered a real submission; the table holds only two test rows and app_feedback_sent has never fired from any device, including c1 who says she used it
 OPEN gate_c_date_unset :: gtm :: no target date is recorded for gate C
+SHIPPED 2026-08-01 :: c1 activated — 13 confirmed pieces in about thirty minutes, camera only, connected mid-session, welcome email delivered at 03:53Z. Third activated member
+SHIPPED 2026-08-01 :: privacy lending amendment deployed and verified live, ahead of the first build carrying lending
 SHIPPED 2026-08-01 :: ig13-friendsonly posted as a reel and recorded its first tagged arrival, the first slot measured end to end
 SHIPPED 2026-07-31 :: todays-fit no longer invents an outfit for a closet that cannot make one, and one-piece garments now count as whole-body
 SHIPPED 2026-07-31 :: client half of reusable invites committed, so prod schema and repo agree again
@@ -53,7 +57,7 @@ SHIPPED 2026-07-30 :: migration 0025, reusable per-user invites, uncapped and du
 SHIPPED 2026-07-30 :: migration 0024, campaign arrivals logged by tag and referrer host
 SHIPPED 2026-07-30 :: landing page relaunched lending-first with real wardrobe cutouts
 FACTCOUNT 16
-OPENCOUNT 8
+OPENCOUNT 9
 <!-- /VOLLEY-STATE -->
 
 # Volley — project brief
