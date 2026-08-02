@@ -4,7 +4,7 @@ BRIEF-GENERATED 2026-08-02T01:05Z
 BRIEF-COMMIT 2c25b3f
 BRIEF-BRANCH main
 FACT current_build :: 14 :: eng :: 2026-08-01
-FACT staged_build :: none — 14 is the current build :: eng :: 2026-08-01
+FACT staged_build :: 17, submitted 2026-08-02 and added to the First Serve external group, awaiting Beta App Review :: eng :: 2026-08-02
 FACT friends_signed_in :: 6 :: eng :: 2026-08-01
 FACT items_cataloged :: 123 total / 122 confirmed :: eng :: 2026-08-01
 FACT invite_reusability :: reusable and uncapped; 2 durable codes minted, 9 legacy still expiring :: eng :: 2026-08-01
@@ -19,7 +19,7 @@ FACT landing_lending_first :: shipped :: gtm :: 2026-07-30
 FACT landing_imagery :: real wardrobe cutouts :: gtm :: 2026-07-30
 FACT gate_a :: closed :: joint :: 2026-07-21
 FACT gate_b :: closed :: joint :: 2026-07-28
-NOTE staged_build :: nothing is staged — build 14 cleared review and is on all six cohort phones as of 2026-08-02. It was cut from main at 17:41 on Jul 31 and does carry 18b/19, verified in the tree rather than assumed. The 13 waiting shares are now visible to four of the six. Gate C is NOT one borrow away: no cohort member owns a lendable item, so there is nothing an eligible pair could borrow :: 2026-08-02
+NOTE staged_build :: build 17 is staged, not live. Numbering note — EAS autoIncrement counts every cut including cancelled ones, so 15 and 16 were consumed by two aborted attempts and this is 17, not 15; look for 17 in App Store Connect. It carries the /f/ friend-closet deep link, friend_closet_opened source, the You tab reorder (at the net, friends, worn lately), feedback-door instrumentation, closet_viewed pending_review, onboarding_milestone_10 relocated out of an unreachable path, capture telemetry, and the library picker capped at quality 0.8. Verified against the built tree at commit 3fbe855, not against a commit date. The four share emails are gated on it clearing review AND on the /f/ link being walked once on a device, since that route has never executed. Build 14 cleared review and is on all six cohort phones as of 2026-08-02. It was cut from main at 17:41 on Jul 31 and does carry 18b/19, verified in the tree rather than assumed. The 13 waiting shares are now visible to four of the six. Gate C is NOT one borrow away: no cohort member owns a lendable item, so there is nothing an eligible pair could borrow :: 2026-08-02
 NOTE friends_signed_in :: six, not five — c6 joined by referral from c5 on Jul 30 and was not in the original tier-1 list
 NOTE items_cataloged :: c1 is 14 items / 13 confirmed plus 1 still tagged. She signed in 07-28, took no photo for four days, then activated 08-01 in one 27m49s sitting — 16 photos, 13 confirms, 27 tag corrections, first wear events any tester has logged :: 2026-08-02
 NOTE items_cataloged :: c2 is 6 captured / 6 confirmed, but she confirmed NONE of them — the six were admitted by ad-hoc SQL on 2026-08-01 after a server-side auto-admit deploy. She has never fired item_reviewed in her life and has not opened the app since 07-31. Her original stall was a 2.5-hour pipeline outage, not disinterest :: 2026-08-02
