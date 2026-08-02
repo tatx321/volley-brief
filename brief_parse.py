@@ -56,6 +56,8 @@ FORBIDDEN = [
 ]
 BEGIN, END = "<!-- VOLLEY-STATE v1 -->", "<!-- /VOLLEY-STATE -->"
 
+ISO_DAY = re.compile(r"\d{4}-\d{2}-\d{2}")
+
 
 class Refused(Exception):
     pass
@@ -113,8 +115,18 @@ def parse(block):
                 raise Refused(f"malformed FACT line (want 4 fields, got {len(p)}): {line[:70]}")
             facts[p[0]] = {"value": p[1], "owner": p[2], "as_of": p[3]}
         elif key == "NOTE":
-            i, _, t = rest.partition("::")
-            notes.setdefault(i.strip(), []).append(t.strip())
+            # NOTE <fact_id> :: <prose> [:: <as_of YYYY-MM-DD>]
+            # The trailing stamp is optional so existing briefs still parse, but
+            # without it a note has no age and nothing can tell it has gone stale
+            # against its own fact. That is exactly how the prose ended up a day
+            # behind the numbers on 2026-08-01.
+            parts = [x.strip() for x in rest.split("::")]
+            i = parts[0]
+            as_of = None
+            if len(parts) > 2 and ISO_DAY.fullmatch(parts[-1]):
+                as_of = parts.pop()
+            t = " :: ".join(parts[1:])
+            notes.setdefault(i, []).append({"text": t, "as_of": as_of})
         elif key == "OPEN":
             p = [x.strip() for x in rest.split("::")]
             if len(p) != 3:
@@ -126,7 +138,29 @@ def parse(block):
     return head, facts, notes, opens, shipped
 
 
-def verify(head, facts, opens, block):
+def note_drift(facts, notes):
+    """Find notes that are older than the fact they annotate, and notes with no age.
+
+    A NOTE is prose about a FACT. The fact gets regenerated; the prose does not,
+    so the two silently diverge — and because the brief is what every analyst
+    reads first, the drift costs more than the individual errors do. Two agents
+    independently refused the 2026-08-01 brief over exactly this.
+
+    Returns (stale, unstamped). Stale is a refusal; unstamped is reported, so
+    that legacy notes surface as work to do rather than blocking a push today.
+    """
+    stale, unstamped = [], []
+    for fid, entries in notes.items():
+        fact_as_of = facts.get(fid, {}).get("as_of")
+        for e in entries:
+            if not e["as_of"]:
+                unstamped.append((fid, e["text"]))
+            elif fact_as_of and ISO_DAY.fullmatch(fact_as_of) and e["as_of"] < fact_as_of:
+                stale.append((fid, e["as_of"], fact_as_of, e["text"]))
+    return stale, unstamped
+
+
+def verify(head, facts, opens, block, notes=None):
     """Every check here is a refusal, not a warning. A brief we half-trust is worse than none."""
     if head.get("BRIEF-VERSION") != "1":
         raise Refused(f"unknown BRIEF-VERSION {head.get('BRIEF-VERSION')!r} — this parser speaks v1")
@@ -158,6 +192,16 @@ def verify(head, facts, opens, block):
     for name in load_denylist():
         if re.search(rf"\b{re.escape(name)}\b", block, re.I):
             raise Refused(f"a cohort member is named in a public brief ('{name}') — use opaque ids")
+
+    if notes is not None:
+        stale, _ = note_drift(facts, notes)
+        if stale:
+            first = stale[0]
+            raise Refused(
+                f"{len(stale)} NOTE line(s) are older than the fact they annotate — "
+                f"e.g. {first[0]} is stamped {first[1]} against a fact as_of {first[2]}: "
+                f"\"{first[3][:60]}…\". Re-derive the note or restamp it; a note that "
+                "contradicts its own fact is worse than no note")
 
 
 def freshness(head, state):
@@ -196,14 +240,19 @@ def main():
             names = load_denylist()
             block = extract(open(path, encoding="utf-8").read())
             head, facts, notes, opens, shipped = parse(block)
-            verify(head, facts, opens, block)
+            verify(head, facts, opens, block, notes)
             freshness(head, None)
         except Refused as e:
             print(f"BLOCKED — {e}")
             print("do not push. this file would be public.")
             return 2
+        _, unstamped = note_drift(facts, notes)
         print(f"guard ok · {len(facts)} facts · {len(opens)} open · {len(names)} cohort names "
               "checked · no names, codes or keys found · safe to push")
+        if unstamped:
+            print(f"  note: {len(unstamped)} of {sum(len(v) for v in notes.values())} NOTE lines "
+                  "carry no as_of, so nothing can tell if they have gone stale. Stamp them "
+                  "'NOTE <id> :: <text> :: YYYY-MM-DD' as you touch them.")
         return 0
 
     try:
@@ -216,7 +265,7 @@ def main():
     try:
         block = extract(open(path, encoding="utf-8").read())
         head, facts, notes, opens, shipped = parse(block)
-        verify(head, facts, opens, block)
+        verify(head, facts, opens, block, notes)
         gen = freshness(head, state)
     except Refused as e:
         print(f"READ REFUSED — {e}")
