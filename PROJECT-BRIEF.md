@@ -1,10 +1,10 @@
 <!-- VOLLEY-STATE v1 -->
 BRIEF-VERSION 1
-BRIEF-GENERATED 2026-08-01T22:20Z
-BRIEF-COMMIT 5e0be61
+BRIEF-GENERATED 2026-08-02T01:05Z
+BRIEF-COMMIT 2c25b3f
 BRIEF-BRANCH main
 FACT current_build :: 14 :: eng :: 2026-08-01
-FACT staged_build :: 14, awaiting Apple review :: eng :: 2026-08-01
+FACT staged_build :: none — 14 is the current build :: eng :: 2026-08-01
 FACT friends_signed_in :: 6 :: eng :: 2026-08-01
 FACT items_cataloged :: 123 total / 122 confirmed :: eng :: 2026-08-01
 FACT invite_reusability :: reusable and uncapped; 2 durable codes minted, 9 legacy still expiring :: eng :: 2026-08-01
@@ -31,15 +31,16 @@ NOTE items_cataloged :: every cohort member who catalogued anything did it on ex
 NOTE invite_reusability :: migration 0025 is applied in prod and committed; the client half was uncommitted until Jul 31 and is now on main. All 14 existing codes still carry an expiry because get-or-create returns the caller's existing row
 NOTE items_cataloged :: 13 item_shares and 6 lendable items now exist, all created by Tate on 2026-08-01 as a deliberate nudge — 3 to c5, 4 to c3, 3 to c2, plus 3 from a demo account. They are real rows and they will appear the moment a build carrying 18b/19 reaches the cohort
 NOTE friends_signed_in :: two accounts created 2026-08-01 are Tate's own test rigs on the onvolley.com domain, not cohort members, and are excluded from this count
-NOTE current_build :: build 14 reached the cohort 2026-08-01, confirmed by Tate against App Store Connect. It is the FIRST build ever to carry sharing, lendable and the borrow loop
-NOTE gate_c_build :: the 16 shares and 9 lendable pieces are now visible to the cohort for the first time. But no cohort member has opened a friend closet yet — all friend_closet_opened events are Tate's. Available is not opened
+NOTE current_build :: build 14 is the first build ever to carry sharing, lendable and the borrow loop. Tate confirmed distribution against App Store Connect on 2026-08-01; this cannot be verified from telemetry because no event carries app version
+NOTE gate_c_build :: CORRECTED — every lendable item belongs to Tate (6) or to Ada, the App Review seed (2). ZERO are owned by a cohort member, and the 13 shares are Tate's outbound nudge. Under Tate's own founder exclusion a borrow he is party to does not close the gate, so gate C is arithmetically impossible today regardless of build state
+NOTE gate_c_build :: build 14 reaching the cohort is Tate's direct observation against App Store Connect. docs/status/2026-08-01.md infers the opposite from absence of data, which is the weaker evidence — but NO event carries app version, so the app itself cannot settle it. Treat the build question as open and the lendable question as decisive, because the second blocks gate C either way
 NOTE gate_c_build :: build 13 was cut from an off-main staged commit that reverted 18b and 19 thirty-two seconds before the build started. Main carries both in full; no build ever has
 NOTE feedback_pipe :: in-app door plus the inbox function, both active in prod
 NOTE landing_attribution :: arrivals are logged by tag and referrer host with no identifier of any kind; the first post measured end to end is the Jul 30 story set
 NOTE privacy_lending_amendment :: the live policy states that sharing a piece is not built and that a friend cannot see any item, and promises to say so there before it ships. It must deploy in the same motion as the first build carrying lending
 NOTE gate_b :: recomputed Jul 31 against live data rather than carried forward
 OPEN legacy_invites_expire :: eng :: 9 unredeemed codes still carry an expiry, the earliest on 2026-08-03; two durable codes now exist. Tapping Invite friends promotes the newest to never-expiring
-OPEN gate_c_one_borrow :: joint :: everything gate C needs is now live — build 14 is on the cohort's phones and 9 pieces are lendable. What remains is one real borrow between two real friends, and nobody has opened a friend closet yet
+OPEN gate_c_no_eligible_lender :: joint :: gate C cannot close today. No cohort member owns a single lendable item — all 8 belong to Tate or the App Review seed — and a borrow Tate is party to does not qualify. The path is c5 marking one piece lendable and sharing it with c6; it needs a conversation, not code
 OPEN cohort_confirm_stall :: eng :: c2 has 6 photos and zero confirms after 3 days, and c1 independently reported the same seam in words — capture to closet takes two screens and she called it unintuitive. Two of six on the same handoff is a pattern, not an anecdote
 OPEN feedback_pipe_empty :: eng :: the in-app feedback door has never delivered a real submission; the table holds only two test rows and app_feedback_sent has never fired from any device, including c1 who says she used it
 OPEN gate_c_date_unset :: gtm :: no target date is recorded for gate C
